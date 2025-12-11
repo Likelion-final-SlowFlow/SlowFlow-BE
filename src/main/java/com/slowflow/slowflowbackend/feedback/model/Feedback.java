@@ -1,6 +1,6 @@
-package com.slowflow.SlowFlow_backend.feedback.model;
+package com.slowflow.slowflowbackend.feedback.model;
 
-import com.slowflow.SlowFlow_backend.score.model.DailyState;
+import com.slowflow.slowflowbackend.score.model.DailyState;
 import jakarta.persistence.*;
 import lombok.*;
 

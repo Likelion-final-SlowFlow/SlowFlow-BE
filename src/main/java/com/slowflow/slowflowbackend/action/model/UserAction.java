@@ -1,8 +1,8 @@
-package com.slowflow.SlowFlow_backend.action.model;
+package com.slowflow.slowflowbackend.action.model;
 
-import com.slowflow.SlowFlow_backend.member.model.Member;
-import com.slowflow.SlowFlow_backend.rule.model.RuleCategory;
-import com.slowflow.SlowFlow_backend.rule.model.ScoringRule;
+import com.slowflow.slowflowbackend.member.model.Member;
+import com.slowflow.slowflowbackend.rule.model.RuleCategory;
+import com.slowflow.slowflowbackend.rule.model.ScoringRule;
 import jakarta.persistence.*;
 import lombok.*;
 

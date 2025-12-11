@@ -1,4 +1,4 @@
-package com.slowflow.SlowFlow_backend.rule.model;
+package com.slowflow.slowflowbackend.rule.model;
 
 import jakarta.persistence.*;
 import lombok.*;

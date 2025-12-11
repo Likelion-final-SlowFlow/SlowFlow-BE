@@ -1,6 +1,6 @@
-package com.slowflow.SlowFlow_backend.score.model;
+package com.slowflow.slowflowbackend.score.model;
 
-import com.slowflow.SlowFlow_backend.member.model.Member;
+import com.slowflow.slowflowbackend.member.model.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

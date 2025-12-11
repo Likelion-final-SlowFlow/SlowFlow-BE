@@ -1,4 +1,4 @@
-package com.slowflow.SlowFlow_backend.global.exception;
+package com.slowflow.slowflowbackend.global.exception;
 
 import lombok.Getter;
 

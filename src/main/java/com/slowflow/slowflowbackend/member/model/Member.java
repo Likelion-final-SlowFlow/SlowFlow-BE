@@ -1,7 +1,7 @@
-package com.slowflow.SlowFlow_backend.member.model;
+package com.slowflow.slowflowbackend.member.model;
 
-import com.slowflow.SlowFlow_backend.action.model.UserAction;
-import com.slowflow.SlowFlow_backend.score.model.DailyScore;
+import com.slowflow.slowflowbackend.action.model.UserAction;
+import com.slowflow.slowflowbackend.score.model.DailyScore;
 import jakarta.persistence.*;
 import lombok.*;
 

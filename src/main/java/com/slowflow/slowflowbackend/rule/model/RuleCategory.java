@@ -1,4 +1,4 @@
-package com.slowflow.SlowFlow_backend.rule.model;
+package com.slowflow.slowflowbackend.rule.model;
 
 public enum RuleCategory {
     DIET, EXERCISE, SLEEP
