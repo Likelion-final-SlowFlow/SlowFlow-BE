@@ -1,6 +1,6 @@
-package com.slowflow.SlowFlow_backend.global.response;
+package com.slowflow.slowflowbackend.global.response;
 
-import com.slowflow.SlowFlow_backend.global.exception.ErrorCode;
+import com.slowflow.slowflowbackend.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
