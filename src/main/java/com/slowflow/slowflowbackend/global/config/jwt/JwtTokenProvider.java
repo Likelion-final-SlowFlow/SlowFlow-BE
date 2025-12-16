@@ -14,7 +14,7 @@ public class JwtTokenProvider {
     private final JwtProperties properties;
     private Key key;
 
-    private static final long ACCESS_EXPIRATION = 10 * 60 * 1000L;           // 10분
+    private static final long ACCESS_EXPIRATION = 20 * 60 * 1000L;           // 20분
     private static final long REFRESH_EXPIRATION = 30L * 24 * 60 * 60 * 1000; // 30일
 
 
