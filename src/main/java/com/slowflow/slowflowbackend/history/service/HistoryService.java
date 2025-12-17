@@ -1,7 +1,6 @@
 package com.slowflow.slowflowbackend.history.service;
 
-import com.slowflow.slowflowbackend.history.dto.WeeklyDayDto;
-import com.slowflow.slowflowbackend.history.dto.WeeklyHistoryResponse;
+import com.slowflow.slowflowbackend.history.dto.*;
 import com.slowflow.slowflowbackend.member.model.Member;
 import com.slowflow.slowflowbackend.score.model.DailyScore;
 import com.slowflow.slowflowbackend.score.model.DailyState;
@@ -19,6 +18,7 @@ public class HistoryService {
 
     private final DailyScoreRepository dailyScoreRepository;
 
+    // 주간 히스토리 조회
     public WeeklyHistoryResponse getWeeklyHistory(Member member, LocalDate baseDate) {
         LocalDate today = LocalDate.now();
         LocalDate target = (baseDate != null) ? baseDate : today;
@@ -76,6 +76,75 @@ public class HistoryService {
                 canGoNext,
                 goalAchievedDays,
                 days
+        );
+    }
+
+    // 월간 히스토리 조회
+    public MonthlyHistoryResponse getMonthlyHistory(Member member, LocalDate baseDate) {
+        LocalDate today = LocalDate.now();
+        LocalDate target = (baseDate != null) ? baseDate : today;
+
+        LocalDate monthStart = target.withDayOfMonth(1);
+        LocalDate monthEnd = target.withDayOfMonth(target.lengthOfMonth());
+
+        // 해당 월 DailyScore 로딩
+        List<DailyScore> scores = dailyScoreRepository.findByMemberIdAndDateBetween(
+                member.getId(), monthStart, monthEnd
+        );
+
+        Map<LocalDate, DailyScore> byDate = new HashMap<>();
+        for (DailyScore ds : scores) byDate.put(ds.getDate(), ds);
+
+        // 해당 월 모든 날짜 총점
+        List<MonthlyDayDto> days = new ArrayList<>();
+        int goalAchievedDays = 0;
+
+        // 주차별 (+/-) 합
+        // key=weekOfMonth, value=[posSum, negSum]
+        Map<Integer, int[]> weekSums = new HashMap<>();
+
+        LocalDate cur = monthStart;
+        while (!cur.isAfter(monthEnd)) {
+            DailyScore ds = byDate.get(cur);
+
+            int total = (ds != null) ? ds.getTotalScore() : 0;
+            days.add(new MonthlyDayDto(cur, total));
+
+            if (ds != null && isGoalAchieved(member, ds)) {
+                goalAchievedDays++;
+            }
+
+            int weekOfMonth = calcWeekOfMonthSundayStart(cur);
+
+            int pos = 0;
+            int neg = 0;
+            if (ds != null) {
+                pos = safe(ds.getDietPositive()) + safe(ds.getExercisePositive()) + safe(ds.getSleepPositive());
+                neg = safe(ds.getDietNegative()) + safe(ds.getExerciseNegative()) + safe(ds.getSleepNegative());
+            }
+
+            weekSums.putIfAbsent(weekOfMonth, new int[]{0, 0});
+            weekSums.get(weekOfMonth)[0] += pos;
+            weekSums.get(weekOfMonth)[1] += neg;
+
+            cur = cur.plusDays(1);
+        }
+
+        int maxWeek = calcWeekOfMonthSundayStart(monthEnd);
+        List<MonthlyWeekDto> weeks = new ArrayList<>();
+        for (int w = 1; w <= maxWeek; w++) {
+            int[] sum = weekSums.getOrDefault(w, new int[]{0, 0});
+            weeks.add(new MonthlyWeekDto(w, sum[0], sum[1]));
+        }
+
+        return new MonthlyHistoryResponse(
+                target.getYear(),
+                target.getMonthValue(),
+                monthStart,
+                monthEnd,
+                goalAchievedDays,
+                days,
+                weeks
         );
     }
 

@@ -1,6 +1,7 @@
 package com.slowflow.slowflowbackend.history.controller;
 
 import com.slowflow.slowflowbackend.global.response.ApiResponse;
+import com.slowflow.slowflowbackend.history.dto.MonthlyHistoryResponse;
 import com.slowflow.slowflowbackend.history.dto.WeeklyHistoryResponse;
 import com.slowflow.slowflowbackend.history.service.HistoryService;
 import com.slowflow.slowflowbackend.member.model.Member;
@@ -31,5 +32,18 @@ public class HistoryController {
 
         WeeklyHistoryResponse result = historyService.getWeeklyHistory(member, baseDate);
         return ResponseEntity.ok(ApiResponse.ok("주간 히스토리 조회 성공", result));
+    }
+
+    // 월간 히스토리 조회
+    @GetMapping("/monthly")
+    public ResponseEntity<ApiResponse<MonthlyHistoryResponse>> getMonthly(
+            Authentication authentication,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate baseDate
+    ) {
+        Member member = (Member) authentication.getPrincipal();
+        MonthlyHistoryResponse result = historyService.getMonthlyHistory(member, baseDate);
+        return ResponseEntity.ok(ApiResponse.ok("월간 히스토리 조회 성공", result));
     }
 }
