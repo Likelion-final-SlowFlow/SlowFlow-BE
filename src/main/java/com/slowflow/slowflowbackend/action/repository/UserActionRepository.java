@@ -13,4 +13,6 @@ public interface UserActionRepository extends JpaRepository<UserAction, Long> {
             LocalDate start,
             LocalDate end
     );
+
+    boolean existsByMemberIdAndDate(Long memberId, LocalDate date);
 }

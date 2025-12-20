@@ -17,7 +17,7 @@ public class Feedback {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DailyState state;
+    private FeedbackType type;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
