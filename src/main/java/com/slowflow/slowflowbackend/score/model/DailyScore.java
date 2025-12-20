@@ -46,4 +46,19 @@ public class DailyScore {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void updateDietPositive(int v) { this.dietPositive = v; }
+    public void updateDietNegative(int v) { this.dietNegative = v; }
+
+    public void updateExercisePositive(int v) { this.exercisePositive = v; }
+    public void updateExerciseNegative(int v) { this.exerciseNegative = v; }
+
+    public void updateSleepPositive(int v) { this.sleepPositive = v; }
+    public void updateSleepNegative(int v) { this.sleepNegative = v; }
+
+    public void updateTotalScore(int v) { this.totalScore = v; }
+
+    public void updateState(DailyState state) { this.state = state; }
+
+    public void updateAiFeedback(String feedback) { this.aiFeedback = feedback; }
 }
