@@ -1,5 +1,7 @@
 package com.slowflow.slowflowbackend.global.exception;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -65,9 +67,26 @@ public class GlobalExceptionHandler {
 
     // 5. JSON 파싱 오류
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiResponse<Void>> handleJsonParseException(
-            HttpMessageNotReadableException e) {
+    public ResponseEntity<ApiResponse<Void>> handleJsonParseException(HttpMessageNotReadableException e) {
 
+        Throwable cause = e.getCause();
+
+        // enum 값이 잘못 들어온 케이스
+        if (cause instanceof InvalidFormatException ife) {
+
+            boolean isCategoryField = ife.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .anyMatch("category"::equals);
+
+            if (isCategoryField) {
+                String message = "category는 DIET / EXERCISE / SLEEP 중 하나여야 합니다.";
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.error(ErrorCode.INVALID_CATEGORY, message));
+            }
+        }
+
+        // 그 외는 기존처럼 JSON 오류로 처리
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(ErrorCode.INVALID_JSON));
