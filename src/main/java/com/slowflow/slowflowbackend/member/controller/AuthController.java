@@ -4,11 +4,13 @@ import com.slowflow.slowflowbackend.global.response.ApiResponse;
 import com.slowflow.slowflowbackend.member.dto.LoginRequest;
 import com.slowflow.slowflowbackend.member.dto.LoginResponse;
 import com.slowflow.slowflowbackend.member.dto.SignupRequest;
+import com.slowflow.slowflowbackend.member.model.Member;
 import com.slowflow.slowflowbackend.member.service.AuthService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -56,6 +58,17 @@ public class AuthController {
     public ResponseEntity<ApiResponse<LoginResponse>> reissue(@RequestHeader("Refresh-Token") String refreshToken) {
         return ResponseEntity.ok(
                 ApiResponse.ok("재발급 성공", authService.reissue(refreshToken))
+        );
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
+        authService.logout(member.getId());
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("로그아웃 되었습니다.", null)
         );
     }
 }

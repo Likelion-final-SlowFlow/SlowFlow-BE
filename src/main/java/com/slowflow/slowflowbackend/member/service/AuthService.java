@@ -99,4 +99,9 @@ public class AuthService {
 
         return new LoginResponse(newAccess, newRefresh);
     }
+
+    // 로그아웃
+    public void logout(Long memberId) {
+        refreshTokenRepository.deleteById(memberId);
+    }
 }
